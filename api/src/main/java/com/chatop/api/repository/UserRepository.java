@@ -10,5 +10,6 @@ import com.chatop.api.model.User;
 // CRUD refers Create, Read, Update, Delete
 @Repository
 public interface UserRepository extends CrudRepository<User, Long>{
+
     
 }
