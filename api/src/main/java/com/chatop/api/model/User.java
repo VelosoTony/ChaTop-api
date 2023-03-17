@@ -1,52 +1,45 @@
 package com.chatop.api.model;
 
-import java.sql.Date;
+import java.time.LocalDateTime ;
 
-import jakarta.persistence.Column;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
 @Data // annotation Lombok qui évite d'ajouter les getters et setters.
+@Builder
 @Entity // annotation qui indique que la classe correspond à une table de la BD.
 @Table(name = "users") // indique le nom de la table associée
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id // clé primaire de la table 
     @GeneratedValue(strategy = GenerationType.IDENTITY) // id est auto-incrémenté
-    private Long id;
+    private Integer id;
     
-    private String email;
-
     private String name;
+
+    private String email;
 
     private String password;
 
-    @Column(name="created_at")
-    private Date createdDate;
+    @CreatedDate
+    private LocalDateTime  created_at;
 
-    @Column(name="updated_at")
-    private Date updatedDate;
-    
-    
-    public String getUsername() {
-        return email;
-    }
-
-    public void setUsername(String username) {
-        this.email = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @LastModifiedDate
+    private LocalDateTime  updated_at;
 
 }

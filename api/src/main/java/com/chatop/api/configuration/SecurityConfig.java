@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -35,14 +36,13 @@ public class SecurityConfig {
 		// configure AuthenticationManager so that it knows from where to load
 		// user for matching credentials
 		// Use BCryptPasswordEncoder
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(jwtUserDetailsService)
+            .passwordEncoder(passwordEncoder());
 	}
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
          return authConfig.getAuthenticationManager();
@@ -51,23 +51,33 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // disable Cross-Site Request Forgery
+                .cors()
+                .and()
+                .csrf().disable()// disable Cross-Site Request Forgery
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Spring Security will never create an HttpSession and it will never use it to obtain the Security Context     
                 .and()
-                .authorizeHttpRequests(auth -> 
-                                auth.requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
-                                .anyRequest().authenticated()// user should be authenticated for any request in application
-                )
-                .httpBasic(); // Spring Security's HTTP Basic Authentication.
-        
+                .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")
+                .permitAll()
+                .anyRequest()
+                .authenticated();// user should be authenticated for any request in application
+
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
+    @Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(jwtUserDetailsService);
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+	}
 
 }
