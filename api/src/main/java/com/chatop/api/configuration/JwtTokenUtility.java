@@ -1,6 +1,5 @@
 package com.chatop.api.configuration;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.chatop.api.model.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 
 @Component
-public class JwtTokenUtility implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class JwtTokenUtility {
 
     public static final long JWT_TOKEN_VALIDITY = 86400; // validity = 24H
 
