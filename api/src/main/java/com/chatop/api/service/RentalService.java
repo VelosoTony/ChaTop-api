@@ -3,11 +3,17 @@ package com.chatop.api.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.chatop.api.model.Rentals;
+
+import com.chatop.api.dto.response.RentalResponse;
+import com.chatop.api.model.Rental;
+import com.chatop.api.model.User;
 import com.chatop.api.repository.RentalRepository;
+import com.chatop.api.repository.UserRepository;
 
-
+import jakarta.transaction.Transactional;
 import lombok.Data;
 
 @Data
@@ -17,17 +23,55 @@ public class RentalService {
     @Autowired
     private RentalRepository rentalRepository;
 
-    public Optional<Rentals> getRental(final Long id) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public Optional<Rental> getRental(final Integer id) {
         return rentalRepository.findById(id);
     }
 
-    public Iterable<Rentals> getRentals() {
+    public Iterable<Rental> getRentals() {
         return rentalRepository.findAll();
     }
 
-    
-    public Rentals saveRental(Rentals rental) {
-        Rentals savedRental = rentalRepository.save(rental);
-        return savedRental;
-    }  
+    @Transactional
+    public Rental save(RentalResponse rental) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();  
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email);
+        Integer userId = user.getId();
+		Rental newRental = Rental.builder()
+            .name(rental.getName())
+            .surface(rental.getSurface())
+            .price(rental.getPrice())
+            .picture(rental.getPicture())
+            .description(rental.getDescription())
+            .owner_id(userId)
+            .build();
+		return rentalRepository.save(newRental);
+	}
+
+    @Transactional
+    public String updateRental(int id, RentalResponse rental) {
+        
+        Optional<Rental> storedRental = rentalRepository.findById(id);
+        if(storedRental.isPresent()) {
+            Rental currentRental = storedRental.get();
+            currentRental.setName(rental.getName());
+            currentRental.setSurface(rental.getSurface());
+            currentRental.setPrice(rental.getPrice());
+            currentRental.setDescription(rental.getDescription());
+            
+            this.rentalRepository.save(currentRental);
+            return "Rental updated !";
+        } else {
+            return "Rental does not exist !";
+        }
+
+	
+
+    }
+
+
+
 }
