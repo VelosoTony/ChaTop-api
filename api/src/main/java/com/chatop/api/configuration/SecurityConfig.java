@@ -63,8 +63,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")
                 .permitAll()
+                .requestMatchers("/v3/**", "/swagger-ui/**")
+                .permitAll()
                 .anyRequest()
-                .authenticated();// user should be authenticated for any request in application
+                .authenticated()// user should be authenticated for any request in application
+                .and()
+                .httpBasic();
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
