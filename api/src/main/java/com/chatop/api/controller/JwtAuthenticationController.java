@@ -75,9 +75,9 @@ public class JwtAuthenticationController {
 					content = @Content(mediaType = "application/json",
 					examples = {@ExampleObject(value ="{\"timestamp\": \"2023-03-19T01:02:21.868+00:00\",\n\"status\": \"400\",\n\"error\": \"Bad Request\",\n\"path\": \"/api/auth/register\"}")})) })			
 	public ResponseEntity<JwtResponse> register (
-		@Valid @RequestBody RegisterRequest userDto) throws Exception {
+		@Valid @RequestBody RegisterRequest user) throws Exception {
 
-		return ResponseEntity.ok(userDetailsService.register(userDto));
+		return ResponseEntity.ok(userDetailsService.register(user));
 	}
 
 

@@ -1,7 +1,5 @@
 package com.chatop.api.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -24,19 +22,7 @@ import com.chatop.api.dto.response.StringResponse;
 import com.chatop.api.model.Rental;
 import com.chatop.api.service.RentalService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-
-// TODO - swagger
 
 @RestController
 @RequestMapping("/api")
@@ -47,28 +33,19 @@ public class RentalController {
     private RentalService rentalService;
 
     /**
-     * Read - Get all rentals
-     * @return - An Iterable object of Rental full filled
+     * Read - Get all users
+     * @return - An Iterable object of User full filled
      */
     @GetMapping("/rentals")
     public Iterable<Rental> getRentals() {
         return rentalService.getRentals();
-    }// TODO - return list with "rentals" property name
+    }
 
      /**
-     * Read - Get rental by id
-     * @return - An object of rental full filled
+     * Read - Get user by id
+     * @return - An object of User full filled
      */
     @GetMapping("/rentals/{id}")
-    @Operation(summary = "Get rental by id", description = "Retrieve rentam information specified by his id")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", 
-					description = "successful operation", 
-					content = @Content(mediaType = "application/json", 
-					schema = @Schema(implementation = Rental.class))),
-		@ApiResponse(responseCode = "401", 
-					description = "unauthorized", 
-					content = @Content)})	
     public Rental getRental(@PathVariable Integer id) {
         Optional<Rental> rental = rentalService.getRental(id);
 		if(rental.isPresent()) {
@@ -79,17 +56,6 @@ public class RentalController {
     }
    
     @PostMapping(value = "/rentals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Create new rental", description = "Create a new rental with the specified informations")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", 
-					description = "successful operation", 
-					content = @Content(mediaType = "application/json", 
-					schema = @Schema(implementation = StringResponse.class),
-					examples = {@ExampleObject(value = "{\"message\":\"Rental created !\"}")})),
-		@ApiResponse(responseCode = "401", 
-					description = "unauthorized", 
-					content = @Content)})	
-                    
     public ResponseEntity<StringResponse> addRental(
                             @RequestParam("name") String name,
                             @RequestParam("surface") Double surface,
@@ -103,25 +69,13 @@ public class RentalController {
             rental.setPrice(price);
             rental.setPicture(picture.getOriginalFilename());
             rental.setDescription(description);                                   
-// TODO - routine to upload picture file
+
             this.rentalService.save(rental);
-            // Map<String, String> map = new HashMap<>();
-            // map.put("message","Rental created !");                    
-            // return ResponseEntity.ok(Map.of("message","Rental created !"));
+
             return ResponseEntity.ok(new StringResponse("Rental created !"));
     }
     
     @PutMapping("/rentals/{id}")
-    @Operation(summary = "Update rental by id", description = "Update a rental with the rental id and specified informations")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", 
-					description = "successful operation", 
-					content = @Content(mediaType = "application/json", 
-					schema = @Schema(implementation = StringResponse.class),
-					examples = {@ExampleObject(value = "{\"message\":\"Rental updated !\"}")})),
-		@ApiResponse(responseCode = "401", 
-					description = "unauthorized", 
-					content = @Content)})	
     public  ResponseEntity<?> updateRental (@PathVariable(value = "id") Integer id,
                                         @RequestParam String name, 
                                         @RequestParam Double surface,
