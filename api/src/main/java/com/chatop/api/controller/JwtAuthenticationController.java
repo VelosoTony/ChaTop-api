@@ -46,9 +46,14 @@ public class JwtAuthenticationController {
 	@Operation(summary = "Authentication", description = "Authentication with email and password, return JWT")
 	@SecurityRequirements(value = {}) // remove authentication security
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = JwtResponse.class),
-					examples = {@ExampleObject(value = "{\"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthQGdtYWlsLmNvbSIsImV4cCI6MTY3OTI3MjMxOSwiaWF0IjoxNjc5MTg1OTE5fQ.sbbkzenaHwll26GHK8srH6c2575wNg4MrJ1KKFQe9MSGBkU6yu7kuBfWHbbT5Xkk2SsBTTb-XFHfn6dLb1fykg\"}")})),
-		@ApiResponse(responseCode = "401", description = "error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StringResponse.class),
+		@ApiResponse(responseCode = "200", 
+					description = "successful operation", 
+					content = @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = JwtResponse.class))),
+		@ApiResponse(responseCode = "401", 
+					description = "error", 
+					content = @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = StringResponse.class),
 					examples = {@ExampleObject(value = "{\"message\":\"error\"}")})) })
 	public ResponseEntity<JwtResponse> generateAuthenticationToken (
 		@RequestBody JwtRequest authenticationRequest)	throws Exception {
@@ -57,13 +62,17 @@ public class JwtAuthenticationController {
 	}
 
 
-	@PostMapping("/register")
+	@PostMapping(value = "/register", produces = "application/json", consumes = "application/json")
 	@Operation(summary = "Registration", description = "Register new user with email, username and password, return JWT")
 	@SecurityRequirements(value = {}) // remove authentication security
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = JwtResponse.class),
-					examples = {@ExampleObject(value = "{\"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYWthQGdtYWlsLmNvbSIsImV4cCI6MTY3OTI3MjMxOSwiaWF0IjoxNjc5MTg1OTE5fQ.sbbkzenaHwll26GHK8srH6c2575wNg4MrJ1KKFQe9MSGBkU6yu7kuBfWHbbT5Xkk2SsBTTb-XFHfn6dLb1fykg\"}")})),
-		@ApiResponse(responseCode = "400", description = "bad request", content = @Content(mediaType = "application/json",
+		@ApiResponse(responseCode = "200", 
+					description = "successful operation", 
+					content = @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = JwtResponse.class))),
+		@ApiResponse(responseCode = "400", 
+					description = "bad request", 
+					content = @Content(mediaType = "application/json",
 					examples = {@ExampleObject(value ="{\"timestamp\": \"2023-03-19T01:02:21.868+00:00\",\n\"status\": \"400\",\n\"error\": \"Bad Request\",\n\"path\": \"/api/auth/register\"}")})) })			
 	public ResponseEntity<JwtResponse> register (
 		@Valid @RequestBody RegisterRequest userDto) throws Exception {
@@ -75,8 +84,13 @@ public class JwtAuthenticationController {
 	@GetMapping("/me")
 	@Operation(summary = "Me", description = "Get information about connected user")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-		@ApiResponse(responseCode = "401", description = "unauthorized", content = @Content)})			
+		@ApiResponse(responseCode = "200", 
+					description = "successful operation", 
+					content = @Content(mediaType = "application/json", 
+					schema = @Schema(implementation = UserResponse.class))),
+		@ApiResponse(responseCode = "401", 
+					description = "unauthorized", 
+					content = @Content)})			
 	public ResponseEntity<UserResponse> me()  throws Exception {
 
 		return ResponseEntity.ok(userDetailsService.me());

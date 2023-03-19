@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -29,25 +30,34 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class Rental {
 
-    @Id // clé primaire de la table 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // id est auto-incrémenté
+    @Schema(description = "Rental identifier", example = "1")
+    @Id // primary key 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // id is auto-increment
     private Integer id;
     
+    @Schema(description = "Rental name", example = "Villa Romana")
     private String name;
 
+    @Schema(description = "Rental surface", example = "240")
     private Double surface;
 
+    @Schema(description = "Price", example = "599000")
     private Double price;
 
+    @Schema(description = "Rental picture", example = "villa.png")
     private String picture;
 
+    @Schema(description = "Rental description", example = "Luxurious villa with swimming pool, tennis court...")
     private String description;
 
+    @Schema(description = "Owner identifier", example = "1")
     private Integer owner_id;
 
+    @Schema(description = "date this rental was created", example = "2023-03-18T00:23:42")
     @CreatedDate
     private LocalDateTime  created_at;
 
+    @Schema(description = "date this rental was updated", example = "2023-03-18T00:23:42")
     @LastModifiedDate
     private LocalDateTime  updated_at;
     
