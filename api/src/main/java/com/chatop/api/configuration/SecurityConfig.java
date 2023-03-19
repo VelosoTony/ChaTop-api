@@ -65,6 +65,8 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/v3/**", "/swagger-ui/**")
                 .permitAll()
+                .requestMatchers( "/error/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()// user should be authenticated for any request in application
                 .and()
