@@ -1,6 +1,7 @@
 package com.chatop.api.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.chatop.api.dto.response.RentalListResponse;
 import com.chatop.api.dto.response.RentalResponse;
+import com.chatop.api.dto.response.RentalsResponse;
 import com.chatop.api.dto.response.StringResponse;
 import com.chatop.api.model.Rental;
 import com.chatop.api.service.RentalService;
@@ -51,9 +54,9 @@ public class RentalController {
      * @return - An Iterable object of Rental full filled
      */
     @GetMapping("/rentals")
-    public Iterable<Rental> getRentals() {
-        return rentalService.getRentals();
-    }// TODO - return list with "rentals" property name
+    public Map<String, List<Rental> > getRentals() {
+        return Map.of("rentals", rentalService.getRentals());
+    }
 
      /**
      * Read - Get rental by id

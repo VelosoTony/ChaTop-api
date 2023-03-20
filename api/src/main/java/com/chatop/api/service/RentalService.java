@@ -1,13 +1,16 @@
 package com.chatop.api.service;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.chatop.api.dto.response.RentalListResponse;
 import com.chatop.api.dto.response.RentalResponse;
+import com.chatop.api.dto.response.RentalsResponse;
 import com.chatop.api.model.Rental;
 import com.chatop.api.model.User;
 import com.chatop.api.repository.RentalRepository;
@@ -30,7 +33,7 @@ public class RentalService {
         return rentalRepository.findById(id);
     }
 
-    public Iterable<Rental> getRentals() {
+    public List<Rental> getRentals() {
         return rentalRepository.findAll();
     }
 
