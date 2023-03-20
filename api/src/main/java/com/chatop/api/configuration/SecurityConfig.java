@@ -23,13 +23,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 public class SecurityConfig {
 
     @Autowired
-	private JwtAuthEntryPoint jwtAuthEntryPoint;
+	private JwtAuthEntryPoint jwtAuthEntryPoint; //NOSONAR
 
     @Autowired
 	private UserDetailsService jwtUserDetailsService;
 
     @Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	private JwtRequestFilter jwtRequestFilter; //NOSONAR
 
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,6 +50,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors()
                 .and()
@@ -74,7 +75,7 @@ public class SecurityConfig {
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+        
         return http.build();
     }
 

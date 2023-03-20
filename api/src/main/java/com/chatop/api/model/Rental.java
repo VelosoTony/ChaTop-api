@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +40,7 @@ public class Rental {
     @Schema(description = "Rental surface", example = "240")
     private Double surface;
 
-    @Schema(description = "Price", example = "599000")
+    @Schema(description = "Price", example = "1900")
     private Double price;
 
     @Schema(description = "Rental picture", example = "villa.png")

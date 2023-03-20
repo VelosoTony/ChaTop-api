@@ -8,9 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.chatop.api.dto.request.RentalUpdateRequest;
 import com.chatop.api.dto.response.RentalListResponse;
 import com.chatop.api.dto.response.RentalResponse;
-import com.chatop.api.dto.response.RentalsResponse;
+import com.chatop.api.dto.response.StringResponse;
 import com.chatop.api.model.Rental;
 import com.chatop.api.model.User;
 import com.chatop.api.repository.RentalRepository;
@@ -29,16 +30,20 @@ public class RentalService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<Rental> getRental(final Integer id) {
-        return rentalRepository.findById(id);
+    public Rental getRental(int id) {
+        Optional<Rental> rental = rentalRepository.findById(id);
+        return rental.orElse(null);
     }
 
-    public List<Rental> getRentals() {
-        return rentalRepository.findAll();
+    public RentalListResponse getRentals(){
+
+        List<Rental> rental = rentalRepository.findAll();
+
+        return new RentalListResponse(rental);
     }
 
     @Transactional
-    public Rental save(RentalResponse rental) {
+    public StringResponse save(RentalResponse rental) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();  
         String email = authentication.getName();
         User user = userRepository.findByEmail(email);
@@ -51,11 +56,12 @@ public class RentalService {
             .description(rental.getDescription())
             .owner_id(userId)
             .build();
-		return rentalRepository.save(newRental);
+	    this.rentalRepository.save(newRental);
+        return new StringResponse("Rental created !");
 	}
 
     @Transactional
-    public String updateRental(int id, RentalResponse rental) {
+    public StringResponse updateRental(int id, RentalUpdateRequest rental) {
         
         Optional<Rental> storedRental = rentalRepository.findById(id);
         if(storedRental.isPresent()) {
@@ -66,9 +72,9 @@ public class RentalService {
             currentRental.setDescription(rental.getDescription());
             
             this.rentalRepository.save(currentRental);
-            return "Rental updated !";
+            return new StringResponse("Rental updated !");
         } else {
-            return "Rental does not exist !";
+            return new StringResponse("Rental does not exist !");
         }
 
 	
