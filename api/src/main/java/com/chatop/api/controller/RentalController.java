@@ -1,5 +1,7 @@
 package com.chatop.api.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import com.chatop.api.dto.response.RentalResponse;
 
 import com.chatop.api.dto.response.StringResponse;
 import com.chatop.api.model.Rental;
+import com.chatop.api.service.FileService;
 import com.chatop.api.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +35,6 @@ public class RentalController {
 
     @Autowired
     private RentalService rentalService;
-
 
     @GetMapping("/rentals")
     @Operation(summary = "Get list orentals", description = "Retrieve information of all rentals")
@@ -75,17 +77,27 @@ public class RentalController {
 		@ApiResponse(responseCode = "401", description = "unauthorized", content = @Content)})	
                     
         public ResponseEntity<StringResponse> addRental(
-                            @RequestBody RentalCreateRequest rentalCreateRequest) {
-
+                            @RequestBody RentalCreateRequest rentalCreateRequest) throws IOException {
+        
             RentalResponse rental = new RentalResponse();
                 rental.setName(rentalCreateRequest.getName());
                 rental.setSurface(rentalCreateRequest.getSurface());
                 rental.setPrice(rentalCreateRequest.getPrice());
                 rental.setPicture(rentalCreateRequest.getPicture().getOriginalFilename()); //TODO implement upload file
                 rental.setDescription(rentalCreateRequest.getDescription());                                   
+                           
+            if (FileService.uploadPicture(rentalCreateRequest.getPicture())) {
 
-            return ResponseEntity.ok(this.rentalService.save(rental));
-    }
+                return ResponseEntity.ok(this.rentalService.save(rental));
+
+            } else {
+
+                return ResponseEntity.ok(new StringResponse("Error uploading file picture."));
+            }                 
+
+           
+ 
+    } 
     
     @PutMapping("/rentals/{id}")
     @Operation(summary = "Update rental by id", description = "Update a rental with the rental id and specified informations")
