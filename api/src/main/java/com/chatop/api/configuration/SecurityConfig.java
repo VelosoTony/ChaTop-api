@@ -64,9 +64,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")
                 .permitAll()
-                .requestMatchers("/v3/**", "/swagger-ui/**")
-                .permitAll()
-                .requestMatchers( "/error/**")
+                .requestMatchers("/v3/**", 
+                                "/swagger-ui/**",
+                                "/error/**",
+                                "/images/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()// user should be authenticated for any request in application

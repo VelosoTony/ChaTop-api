@@ -1,7 +1,6 @@
 package com.chatop.api.controller;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,9 @@ public class RentalController {
 
     @Autowired
     private RentalService rentalService;
+
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/rentals")
     @Operation(summary = "Get list orentals", description = "Retrieve information of all rentals")
@@ -83,10 +85,14 @@ public class RentalController {
                 rental.setName(rentalCreateRequest.getName());
                 rental.setSurface(rentalCreateRequest.getSurface());
                 rental.setPrice(rentalCreateRequest.getPrice());
-                rental.setPicture(rentalCreateRequest.getPicture().getOriginalFilename()); //TODO implement upload file
-                rental.setDescription(rentalCreateRequest.getDescription());                                   
+                
+                rental.setDescription(rentalCreateRequest.getDescription());     
+                
+                String picture = this.fileService.uploadPicture(rentalCreateRequest.getPicture());
+
+                rental.setPicture(picture);
                            
-            if (FileService.uploadPicture(rentalCreateRequest.getPicture())) {
+            if (rental.getPicture() != null) {
 
                 return ResponseEntity.ok(this.rentalService.save(rental));
 
