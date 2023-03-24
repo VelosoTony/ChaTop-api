@@ -8,9 +8,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.*;
 import java.nio.file.*;
 
-
-
-
 @Service // Spécialisation de @Component
 public class FileService {
 
@@ -23,31 +20,40 @@ public class FileService {
     @Value("${upload.folder}")
     private String UPLOAD_FOLDER;
 
-
-
+    // Upload picture file and return the fileURL if success
     public String uploadPicture(MultipartFile multipartFile) throws IOException {
 
+        // define the folder for the upload
+        // !note use of resource folder to allow external access to the uploaded files
+        Path uploadPath = Paths.get(String.format("/src/main/resources/%s", UPLOAD_FOLDER)).normalize();
 
-    Path uploadPath = Paths.get("/src/main/resources/images").normalize();
-        
-    if (!Files.exists(uploadPath)) {
+        // create directory if not found
+        if (!Files.exists(uploadPath)) {
+
             Files.createDirectories(uploadPath);
+
         }
-         
+
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(multipartFile.getOriginalFilename());
+
+            String filename = multipartFile.getOriginalFilename();
+
+            Path filePath = uploadPath.resolve(filename);
+
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return getFileUrl(multipartFile.getOriginalFilename());
+            return getFileUrl(filename);
 
-        } catch (IOException ioe) {     
-            return null; 
+        } catch (IOException ioe) {
+            return null;
         }
     }
 
-    private String getFileUrl(String filename){
-        
-        String url = String.format("http://%s:%s/%s/%s",this.HOSTNAME,this.SERVER_PORT,this.UPLOAD_FOLDER, filename);
+    // generate full URL of the uploaded file example :
+    // http://localhost:3001/images/myimage.png
+    private String getFileUrl(String filename) {
+
+        String url = String.format("http://%s:%s/%s/%s", this.HOSTNAME, this.SERVER_PORT, this.UPLOAD_FOLDER, filename);
 
         return UriComponentsBuilder.fromHttpUrl(url).toUriString();
     }

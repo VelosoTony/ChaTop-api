@@ -25,10 +25,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /**
-     * Read - Get user by id
-     * @return - An object of User full filled
-     */
     @GetMapping("/user/{id}")
     @Operation(summary = "Get user by id", description = "Retrieve account information about user specified by his id")
 	@ApiResponses(value = {

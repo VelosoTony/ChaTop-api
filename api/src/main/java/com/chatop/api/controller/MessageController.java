@@ -31,16 +31,13 @@ public class MessageController {
     @PostMapping(value = "/messages", produces = "application/json", consumes = "application/json")
     @Operation(summary = "Create new message", description = "Create a new message with the specified informations")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", 
-					description = "successful operation", 
+		@ApiResponse(responseCode = "200", description = "successful operation", 
 					content = @Content(mediaType = "application/json", 
 					schema = @Schema(implementation = Message.class),
 					examples = {@ExampleObject(value = "{\"message\":\"Message send with success\"}")})),
-		@ApiResponse(responseCode = "401", 
-					description = "unauthorized", 
+		@ApiResponse(responseCode = "401", description = "unauthorized", 
 					content = @Content),
-        @ApiResponse(responseCode = "400", 
-					description = "bad request", 
+        @ApiResponse(responseCode = "400", description = "bad request", 
 					content = @Content),
                 })	                   
     public ResponseEntity<StringResponse> createRental(@Valid @RequestBody MessageRequest message) {

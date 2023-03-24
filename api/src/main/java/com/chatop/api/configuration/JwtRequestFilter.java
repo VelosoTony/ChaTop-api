@@ -2,7 +2,6 @@ package com.chatop.api.configuration;
 
 import java.io.IOException;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +35,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		String email = null;
 		String jwtToken = null;
-		// JWT Token is in the form "Bearer token". Remove Bearer word and get only the Token
+		// JWT Token is in the form "Bearer token". Remove Bearer word and get only the
+		// Token
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
@@ -50,7 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			logger.warn("JWT Token does not begin with Bearer String");
 		}
 
-		//Once we get the token validate it.
+		// Once we get the token validate it.
 		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(email);
@@ -63,7 +63,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				usernamePasswordAuthenticationToken
 						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				// After setting the Authentication in the context, we specify
-				// that the current user is authenticated. So it passes the Spring Security Configurations successfully.
+				// that the current user is authenticated. So it passes the Spring Security
+				// Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}

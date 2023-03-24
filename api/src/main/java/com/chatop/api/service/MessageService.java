@@ -17,17 +17,16 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
-
     @Transactional
     public Message save(MessageRequest message) {
 
         Message newMessage = Message.builder()
-            .message(message.getMessage())
-            .user_id(message.getUser_id())
-            .rental_id(message.getRental_id())
-            .build();
+                .message(message.getMessage())
+                .user_id(message.getUser_id())
+                .rental_id(message.getRental_id())
+                .build();
 
         return messageRepository.save(newMessage);
     }
-    
+
 }

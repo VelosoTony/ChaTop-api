@@ -23,69 +23,69 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 public class SecurityConfig {
 
     @Autowired
-	private JwtAuthEntryPoint jwtAuthEntryPoint; //NOSONAR
+    private JwtAuthEntryPoint jwtAuthEntryPoint; // NOSONAR
 
     @Autowired
-	private UserDetailsService jwtUserDetailsService;
+    private UserDetailsService jwtUserDetailsService;
 
     @Autowired
-	private JwtRequestFilter jwtRequestFilter; //NOSONAR
+    private JwtRequestFilter jwtRequestFilter; // NOSONAR
 
-	@Autowired
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// configure AuthenticationManager so that it knows from where to load
-		// user for matching credentials
-		// Use BCryptPasswordEncoder
-		auth.userDetailsService(jwtUserDetailsService)
-            .passwordEncoder(passwordEncoder());
-	}
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // configure AuthenticationManager so that it knows from where to load
+        // user for matching credentials
+        // Use BCryptPasswordEncoder
+        auth.userDetailsService(jwtUserDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-         return authConfig.getAuthenticationManager();
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors()
-                .and()
-                .csrf().disable()// disable Cross-Site Request Forgery
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Spring Security will never create an HttpSession and it will never use it to obtain the Security Context     
-                .and()
+                // disable Cross-Site Request Forgery
+                .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
+                // Spring Security will never create an HttpSession and it will never use it to
+                // obtain the Security Context
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
+                // Authorize access to register and login
                 .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")
                 .permitAll()
-                .requestMatchers("/v3/**", 
-                                "/swagger-ui/**",
-                                "/error/**",
-                                "/images/**")
+                // Authorize access to swagger documentation, response status error, upload
+                // folder for images
+                .requestMatchers("/v3/**", "/swagger-ui/**", "/error/**", "/images/**")
                 .permitAll()
+                // user should be authenticated for any other request in application
                 .anyRequest()
-                .authenticated()// user should be authenticated for any request in application
+                .authenticated()
                 .and()
                 .httpBasic();
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 
     @Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(jwtUserDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
-	}
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(jwtUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
 
 }

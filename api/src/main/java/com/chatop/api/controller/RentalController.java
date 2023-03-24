@@ -85,13 +85,13 @@ public class RentalController {
                 rental.setName(rentalCreateRequest.getName());
                 rental.setSurface(rentalCreateRequest.getSurface());
                 rental.setPrice(rentalCreateRequest.getPrice());
-                
                 rental.setDescription(rentalCreateRequest.getDescription());     
                 
+                // uploadPicture and return FileUrl if success
                 String picture = this.fileService.uploadPicture(rentalCreateRequest.getPicture());
 
                 rental.setPicture(picture);
-                           
+            // picture uploaded with success               
             if (rental.getPicture() != null) {
 
                 return ResponseEntity.ok(this.rentalService.save(rental));
