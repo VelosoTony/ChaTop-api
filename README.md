@@ -48,9 +48,9 @@ While the Api is running,
 
 Documentation will be available at the following url in HTML format :
 
-`http://localhost:3001/swagger-ui/index.html`
+http://localhost:3001/swagger-ui/index.html
 
 Documentation will be available at the following url for json format :
 
-`http://localhost:3001/v3/api-docs`
+http://localhost:3001/v3/api-docs
 
