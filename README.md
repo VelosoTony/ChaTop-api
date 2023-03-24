@@ -16,7 +16,7 @@ This RestFul CRUD API is using Spring Boot, Mysql, JPA
 
 ### 1. Clone the github repository
 
-    `git clone https://github.com/VelosoTony/ChaTop-api.git`
+`git clone https://github.com/VelosoTony/ChaTop-api.git`
 
 ### 2. Create MySQL Database
 
@@ -24,17 +24,17 @@ Start MySQL, connect to MySQL Command Line or GUI tool.
 
 Run the script below to create the **chatop** database.
 
-    `src/main/resouces/db_create_chatop.sql`
+`src/main/resouces/db_create_chatop.sql`
 
 ### 3. Set the credential of database access of API
 
-    edit `/src/main/resources/application.properties`
+edit `/src/main/resources/application.properties`
 
-    modify `spring.datasource.username` and `spring.datasource.password` with MySQL user/password.
+modify `spring.datasource.username` and `spring.datasource.password` with MySQL user/password.
 
 ### 4. Run the app using maven
 
-    `mvn spring-boot:run`<br>
+`mvn spring-boot:run`
 */!\ To run this command you need to be in the directory "\api" containing the file "pom.xml".*
 
 The application will start running at http://localhost:3001.
@@ -46,11 +46,11 @@ For more information you can look [here](https://springdoc.org/v2/).
 
 While the Api is running, 
 
-Documentation will be available at the following url in HTML format :<br>
+Documentation will be available at the following url in HTML format :
 
-    `http://localhost:3001/swagger-ui/index.html`
+`http://localhost:3001/swagger-ui/index.html`
 
-Documentation will be available at the following url for json format :<br>
+Documentation will be available at the following url for json format :
 
-    `http://localhost:3001/v3/api-docs`
+`http://localhost:3001/v3/api-docs`
 
