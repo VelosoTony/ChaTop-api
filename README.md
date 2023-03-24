@@ -1,22 +1,56 @@
 # ChaTop-API
 
-![Maven](https://img.shields.io/badge/Apache%20Maven-3.8.7-blueviolet)![Java](https://img.shields.io/badge/Java-17.0.6-red)![JavaScript](https://img.shields.io/static/v1?label=&message=JavaScript&color=yellow)![HTML](https://img.shields.io/static/v1?label=&message=HTML&color=green)
+![Java](https://img.shields.io/badge/Java-17.0.6-red) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0.4-green) ![Spring Security](https://img.shields.io/badge/Spring%20Security-JWT-darkgreen) ![Maven](https://img.shields.io/badge/Apache%20Maven-3.8.7-blueviolet) ![MySQL](https://img.shields.io/badge/MySQL-5.6.x-orange) 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.6, Node version 18.14.0, Package Manager version npm 9.3.1.
+ChaTop API is the back-end part of an applicaton to link future tenants with the owners of seasonal rental.
 
-## Installation
+This RestFul CRUD API is using Spring Boot, Mysql, JPA
 
-1. Clone the application
-`git clone https://https://github.com/VelosoTony/ChaTop-api.git`\
+## Prerequisites
+- This project run on **Java 17**, download [here](https://www.oracle.com/fr/java/technologies/downloads/).
 
-2. Create MySQL Database
-`run src/main/resouces/db_create_chatop.sql`\
+- **Maven** is needed to build the project, download [here](https://maven.apache.org/download.cgi).
 
-3. Change the credential of database access 
-open `/src/main/resources/application.properties`
-modify `spring.datasource.username` and `spring.datasource.password` as per your MySQL credentials.
+- The database is manage on **MySQL**, download [here](https://dev.mysql.com/downloads/installer/).
+## Getting Started
 
-4. Run the app using maven
-`mvn spring-boot:run`
+### 1. Clone the github repository
 
-The API will start running at http://localhost:3001
+    `git clone https://github.com/VelosoTony/ChaTop-api.git`
+
+### 2. Create MySQL Database
+
+Start MySQL, connect to MySQL Command Line or GUI tool.
+
+Run the script below to create the **chatop** database.
+
+    `src/main/resouces/db_create_chatop.sql`
+
+### 3. Set the credential of database access of API
+
+    edit `/src/main/resources/application.properties`
+
+    modify `spring.datasource.username` and `spring.datasource.password` with MySQL user/password.
+
+### 4. Run the app using maven
+
+    `mvn spring-boot:run`<br>
+*/!\ To run this command you need to be in the directory "\api" containing the file "pom.xml".*
+
+The application will start running at http://localhost:3001.
+
+# Documentation
+
+The documentation is base on the **springdoc-openapi** library.
+For more information you can look [here](https://springdoc.org/v2/).
+
+While the Api is running, 
+
+Documentation will be available at the following url in HTML format :<br>
+
+    `http://localhost:3001/swagger-ui/index.html`
+
+Documentation will be available at the following url for json format :<br>
+
+    `http://localhost:3001/v3/api-docs`
+
