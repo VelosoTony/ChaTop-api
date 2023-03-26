@@ -105,7 +105,7 @@ public class RentalController {
  
     } 
     
-    @PutMapping("/rentals/{id}")
+    @PutMapping(value = "/rentals/{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Update rental by id", description = "Update a rental with the rental id and specified informations")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "successful operation", 
